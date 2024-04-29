@@ -36,19 +36,24 @@ async def get_movies() -> list[Movie]:
 
 @app.post("/movies")
 async def create_movie(new_movie: CreateMovieRequest) -> CreateMovieResponse:
-    new_movie = Movie(name=new_movie.name, year=new_movie.year)
-    movies.append(new_movie)
-    return CreateMovieResponse(message=f"{new_movie} created succsessfully.")
+    new_movie_id = uuid.uuid4()
+    movie = Movie(movie_id=new_movie_id, name=new_movie.name, year=new_movie.year)
+    movies.append(movie)
+    return CreateMovieResponse(id = new_movie_id, message=f"{movie.name} created successfully")
 
 @app.put("/movies/{movie_id}")
 async def update_movie(movie_id: uuid.UUID, updated_movie: UpdateMovieRequest) -> UpdateMovieResponse:
     for movie in movies:
         if movie_id == movie_id:
-            movie.name = updated_movie.name,
+            movie.name = updated_movie.name
             movie.year = updated_movie.year
-            return UpdateMovieResponse(message="Movie updated succesfully.")
+            return UpdateMovieResponse(success=True)
     raise HTTPException(status_code=404, detail="Movie not found.")
 
 @app.delete("/movies/{movie_id}")
 async def delete_movie(movie_id: uuid.UUID) -> DeleteMovieResponse:
-    raise NotImplementedError
+    for movie in movies:
+        if movie_id == movie_id:
+            movies.remove(movie)
+            return DeleteMovieResponse(success=True)
+    raise HTTPException(status_code=404, detail="Movie not found.")

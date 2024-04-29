@@ -18,7 +18,8 @@ class Movie(BaseMovie):
 
 class CreateMovieResponse(BaseModel):
     id: UUID
-
+    message: str
+ 
 class UpdateMovieResponse(BaseModel):
     success: bool
 
